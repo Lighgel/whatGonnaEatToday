@@ -1,0 +1,51 @@
+[
+  {
+    "id": "seed-1",
+    "name": "杨国福麻辣烫",
+    "tags": ["辣", "麻辣", "快", "冒菜"],
+    "cuisine": "麻辣烫",
+    "area": "公司附近",
+    "priceLevel": 1,
+    "notes": "周五加班想快点吃完时很稳",
+    "source": "meituan",
+    "status": "want",
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "id": "seed-2",
+    "name": "海底捞",
+    "tags": ["火锅", "聚餐", "辣", "周五"],
+    "cuisine": "火锅",
+    "area": "商场",
+    "priceLevel": 3,
+    "notes": "人多、想热闹、愿意等一等",
+    "source": "douyin",
+    "status": "want",
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "id": "seed-3",
+    "name": "某家日料",
+    "tags": ["清淡", "日料", "鱼", "庆祝"],
+    "cuisine": "日料",
+    "area": "市区",
+    "priceLevel": 3,
+    "notes": "心情好、不想太油的时候",
+    "source": "manual",
+    "status": "neutral",
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "id": "seed-4",
+    "name": "兰州牛肉面",
+    "tags": ["面", "快", "清淡", "家常"],
+    "cuisine": "面",
+    "area": "家附近",
+    "priceLevel": 1,
+    "notes": "累了、下雨、不想选择时",
+    "source": "meituan",
+    "status": "neutral",
+    "lastVisitedAt": "2026-08-20T00:00:00.000Z",
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  }
+]

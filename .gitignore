@@ -1,0 +1,9 @@
+node_modules
+.next
+.ssh/
+out
+data/places.local.json
+.env
+.env.local
+*.log
+.DS_Store

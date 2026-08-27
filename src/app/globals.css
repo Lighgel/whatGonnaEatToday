@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f1e8;
+  --ink: #1f1a16;
+  --muted: #6b5e55;
+  --card: #fffaf3;
+  --accent: #c45c26;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: radial-gradient(circle at top, #fff7ec, var(--bg));
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
