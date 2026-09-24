@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788941872220,
+      "tag": "0000_simple_payback",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789020000000,
+      "tag": "0001_visit_log",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1789100000000,
+      "tag": "0002_place_coords",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,779 @@
+[
+  {
+    "id": "sao-yuhaihui",
+    "name": "御海荟",
+    "match": ["御海荟"],
+    "tags": ["海鲜", "粤菜", "聚餐", "宴请", "大爷点评", "必吃"],
+    "cuisine": "海鲜粤菜",
+    "priceLevel": 4,
+    "status": "want",
+    "notes": "大爷点评置顶必吃榜：海鲜+粤菜融合，从上到下最贵一档。"
+  },
+  {
+    "id": "sao-chaozhenxuan",
+    "name": "潮珍轩",
+    "match": ["潮珍轩"],
+    "tags": ["海鲜", "粤菜", "聚餐", "宴请", "大爷点评", "必吃"],
+    "cuisine": "海鲜粤菜",
+    "priceLevel": 4,
+    "status": "want",
+    "notes": "大爷点评置顶必吃榜：海鲜+粤菜融合。"
+  },
+  {
+    "id": "sao-chengbao-zhenbao",
+    "name": "城堡臻宝中餐厅",
+    "match": ["城堡臻宝", "一方城堡"],
+    "tags": ["海鲜", "大连菜", "宴请", "庆祝", "大爷点评", "必吃"],
+    "cuisine": "大连菜",
+    "priceLevel": 4,
+    "status": "want",
+    "notes": "大爷点评置顶必吃榜：昂贵的大连味道。"
+  },
+  {
+    "id": "sao-xiding",
+    "name": "喜鼎",
+    "match": ["喜鼎"],
+    "tags": ["海鲜", "海胆", "饺子", "聚餐", "大爷点评", "必吃"],
+    "cuisine": "大连海鲜",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：好好点菜体验会很好。有一期「10刷喜鼎点菜攻略」，体验夯拉全看点菜。"
+  },
+  {
+    "id": "sao-junlin-zhongshan",
+    "name": "君霖（中山店）",
+    "match": ["君霖"],
+    "tags": ["海鲜", "私房菜", "聚餐", "黄花鱼", "海肠", "大爷点评", "必吃"],
+    "cuisine": "大连私房菜",
+    "area": "中山区",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评置顶必吃榜：调味精致版的大连味。"
+  },
+  {
+    "id": "sao-yuelaixiang",
+    "name": "悦来香",
+    "match": ["悦来香"],
+    "tags": ["家常", "平价", "聚餐", "大爷点评", "必吃"],
+    "cuisine": "家常菜",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：大连性价比天花板，分量足、做菜用心，包间常满。锅包肉不正宗，其他没啥可挑。"
+  },
+  {
+    "id": "sao-haiyun",
+    "name": "海云饭店",
+    "match": ["海云饭店"],
+    "tags": ["家常", "平价", "聚餐", "大爷点评", "必吃"],
+    "cuisine": "家常菜",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评置顶必吃榜：平价但用心调味。实惠量大，好好调味。"
+  },
+  {
+    "id": "sao-pinweiju",
+    "name": "品味居悦海宴",
+    "match": ["品味居"],
+    "tags": ["海鲜", "海肠", "捞饭", "大爷点评"],
+    "cuisine": "大连海鲜",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：口味还可以，出品参差，人少跟着薅套餐，不建议单点。海肠捞饭模板：没有海量肥肉和鸡蛋抢味。"
+  },
+  {
+    "id": "sao-zihang",
+    "name": "紫航海鲜大连宴（五一广场）",
+    "match": ["紫航"],
+    "tags": ["海鲜", "聚餐", "大爷点评"],
+    "cuisine": "大连海鲜",
+    "area": "中山区·五一广场",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：口味还可以，出品参差，人少跟着薅套餐，不建议单点。"
+  },
+  {
+    "id": "sao-pinhaolou",
+    "name": "品海楼·大连海鲜（老虎滩店）",
+    "match": ["品海楼"],
+    "tags": ["海鲜", "海肠", "捞饭", "大爷点评"],
+    "cuisine": "北派海鲜",
+    "area": "中山区·老虎滩",
+    "priceLevel": 3,
+    "status": "neutral",
+    "notes": "大爷点评：口味还可以，出品参差，人少跟着薅套餐，不建议单点。"
+  },
+  {
+    "id": "sao-xinhaiwei",
+    "name": "新海味",
+    "match": ["新海味"],
+    "tags": ["海鲜", "聚餐", "大爷点评"],
+    "cuisine": "大连海鲜",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：口味还可以，出品参差，人少跟着薅套餐，不建议单点。"
+  },
+  {
+    "id": "sao-liyuan-dongguan",
+    "name": "丽园（东关街店）",
+    "match": ["丽园"],
+    "tags": ["海鲜", "聚餐", "大爷点评"],
+    "cuisine": "大连海鲜",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：口味还可以，出品参差，人少跟着薅套餐，不建议单点。"
+  },
+  {
+    "id": "sao-sugiki",
+    "name": "杉木 すぎき SUGIKI",
+    "match": ["杉木", "sugiki", "すぎき"],
+    "tags": ["日料", "清淡", "庆祝", "大爷点评", "必吃"],
+    "cuisine": "日本料理",
+    "priceLevel": 4,
+    "status": "want",
+    "notes": "大爷点评置顶日料必吃榜：不差钱但也得好好点菜。"
+  },
+  {
+    "id": "sao-longyue",
+    "name": "龍月",
+    "match": ["龍月", "龙月"],
+    "tags": ["日料", "庆祝", "大爷点评", "必吃"],
+    "cuisine": "日本料理",
+    "priceLevel": 4,
+    "status": "want",
+    "notes": "大爷点评置顶日料必吃榜：不差钱但也得好好点菜。"
+  },
+  {
+    "id": "sao-longzhi",
+    "name": "龙鮨",
+    "match": ["龙鮨"],
+    "tags": ["日料", "omakase", "清淡", "大爷点评", "必吃"],
+    "cuisine": "日本料理",
+    "priceLevel": 4,
+    "status": "want",
+    "notes": "大爷点评：omakase，午市性价比高。"
+  },
+  {
+    "id": "sao-xianshengsheng",
+    "name": "仙生生寿司专门店",
+    "match": ["仙生生"],
+    "tags": ["日料", "寿司", "鹅肝", "大爷点评", "必吃"],
+    "cuisine": "寿司",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：全大连最好吃的鹅肝寿司。除了鹅肝其他比较普。招牌单品能撑起一家店。"
+  },
+  {
+    "id": "sao-liangyu",
+    "name": "良渔海屋",
+    "match": ["良渔海屋"],
+    "tags": ["日料", "寿喜锅", "烧鸟", "天妇罗", "大爷点评", "必吃"],
+    "cuisine": "日本料理",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：相对平价档的综合日料，寿喜锅、烧鸟和天妇罗都不错。"
+  },
+  {
+    "id": "sao-yinyi",
+    "name": "寅一面屋",
+    "match": ["寅一面屋", "寅一"],
+    "tags": ["拉面", "日料", "面", "大爷点评", "必吃"],
+    "cuisine": "日式拉面",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：一兰同款豚骨博多碱水细面。大连吃过最复刻日本、口感最好的面。"
+  },
+  {
+    "id": "sao-zhengxian",
+    "name": "争鲜（凯丹店）",
+    "match": ["争鲜"],
+    "tags": ["日料", "寿司", "回转", "大爷点评"],
+    "cuisine": "回转寿司",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：浅尝辄止。凯丹店品控还不错，只推荐三文鱼厚切、赤虾刺身、满汁鹅肝、焦糖三文鱼，别的容易踩雷。"
+  },
+  {
+    "id": "sao-zhenghuangqi",
+    "name": "正黄旗海鲜烧烤大排档（延安路总店）",
+    "match": ["正黄旗"],
+    "tags": ["海鲜", "烧烤", "海肠", "原味", "大爷点评", "必吃"],
+    "cuisine": "海鲜烧烤",
+    "area": "中山区·延安路",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评烧烤必吃榜：只吃烤海鲜，偏原味。"
+  },
+  {
+    "id": "sao-jintaiyang",
+    "name": "金太阳海鲜烧烤",
+    "match": ["金太阳"],
+    "tags": ["海鲜", "烧烤", "辣", "大爷点评", "必吃"],
+    "cuisine": "海鲜烧烤",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评烧烤必吃榜：烤海鲜，鲜甜辣酱。"
+  },
+  {
+    "id": "sao-jinxin",
+    "name": "金鑫海鲜烧烤",
+    "match": ["金鑫"],
+    "tags": ["海鲜", "烧烤", "辣", "大爷点评", "必吃"],
+    "cuisine": "海鲜烧烤",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评烧烤必吃榜：烤海鲜，偏辣。"
+  },
+  {
+    "id": "sao-yanjie",
+    "name": "艳姐烧烤",
+    "match": ["艳姐烧烤"],
+    "tags": ["烧烤", "烤肉串", "啤酒", "周五", "大爷点评", "必吃"],
+    "cuisine": "烧烤",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：烤肉串必吃。老店新吃 8.4 分，夏天撸串看球。"
+  },
+  {
+    "id": "sao-jixiu",
+    "name": "吉岫串店",
+    "match": ["吉岫"],
+    "tags": ["烧烤", "烤肉串", "啤酒", "大爷点评", "必吃"],
+    "cuisine": "烧烤",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评烧烤必吃榜：烤肉串。"
+  },
+  {
+    "id": "sao-fangniuban",
+    "name": "放牛班齐市家庭烤肉",
+    "match": ["放牛班"],
+    "tags": ["烤肉", "聚餐", "牛肉", "大爷点评", "必吃"],
+    "cuisine": "齐齐哈尔烤肉",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评烤肉必吃榜：齐齐哈尔 BBQ。招牌极品牛肋+燕翅能撑起一家店。"
+  },
+  {
+    "id": "sao-tianyan",
+    "name": "天颜过桥米线",
+    "match": ["天颜"],
+    "tags": ["米线", "面", "快", "大爷点评", "必吃"],
+    "cuisine": "米线",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：大连米线吃骨汤和海量麻油，天颜更糯香一丢。汤汤水水店会回购。"
+  },
+  {
+    "id": "sao-lubuli",
+    "name": "卢布里",
+    "match": ["卢布里"],
+    "tags": ["俄餐", "西餐", "奶酪包", "大爷点评", "必吃"],
+    "cuisine": "俄餐",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：俄餐权威，奶酪包封神。低分但复购，菜品参差，好吃的特别好吃。"
+  },
+  {
+    "id": "sao-yaqiao",
+    "name": "亚桥咖喱（延安路店）",
+    "match": ["亚桥咖喱", "亚桥"],
+    "tags": ["咖喱", "印度菜", "快", "大爷点评", "必吃"],
+    "cuisine": "咖喱",
+    "area": "中山区·延安路",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：正宗印度咖喱，红色羊肉+芝士烤饼百吃不厌。"
+  },
+  {
+    "id": "sao-yangji-mian",
+    "name": "杨记面馆",
+    "match": ["杨记面馆"],
+    "tags": ["海鲜", "面", "大爷点评"],
+    "cuisine": "海鲜面",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：大连海鲜面调味和面条口感最权威，就是贵一点，特色但不值得专程。"
+  },
+  {
+    "id": "sao-rifengyuan",
+    "name": "日丰园",
+    "match": ["日丰园"],
+    "tags": ["饺子", "海肠", "家常", "大爷点评", "必吃"],
+    "cuisine": "饺子",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评杂项必吃榜：海肠水饺。"
+  },
+  {
+    "id": "sao-haiweidangjia",
+    "name": "海味当家",
+    "match": ["海味当家"],
+    "tags": ["海鲜", "原味", "大爷点评"],
+    "cuisine": "海鲜",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：吃原味海鲜浅尝辄止，别猛造自助。冷水海鲜鲜甜后劲大，吃多了寒。"
+  },
+  {
+    "id": "sao-adopo",
+    "name": "a dopo",
+    "match": ["a dopo", "adopo"],
+    "tags": ["甜品", "冰淇淋", "gelato", "大爷点评"],
+    "cuisine": "冰淇淋",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：宝藏 gelato，每月换菜单，价格在大连不算贵。"
+  },
+  {
+    "id": "sao-qianao",
+    "name": "千熬鱼汤面",
+    "match": ["千熬鱼汤面"],
+    "tags": ["面", "鱼汤", "家常", "大爷点评"],
+    "cuisine": "面馆",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：鱼汤面标准答案，油脂乳化后的浓醇汤底才能挂面。"
+  },
+  {
+    "id": "sao-yixin",
+    "name": "燚薪",
+    "match": ["燚薪"],
+    "tags": ["日料", "烧鸟", "牛肉饭", "大爷点评"],
+    "cuisine": "日本料理",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：牛肉饭一分价钱一分货；烧鸟没感觉。推翻宋宋的 8.5 分。"
+  },
+  {
+    "id": "sao-yujian",
+    "name": "魚間",
+    "match": ["魚間", "鱼间"],
+    "tags": ["日料", "刺身", "大爷点评", "避雷"],
+    "cuisine": "日本料理",
+    "priceLevel": 3,
+    "status": "skip",
+    "notes": "大爷点评：刺身品质在线，烹调普通，荣昌酱油像阿斯巴甜，糟蹋食材。"
+  },
+  {
+    "id": "sao-dafu-jiaozi",
+    "name": "大福饺子馆",
+    "match": ["大福饺子馆"],
+    "tags": ["饺子", "家常", "平价", "大爷点评"],
+    "cuisine": "饺子",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：跟悦来香一个评价，这个价位里夯。皮韧性不够、人多做不到现包现下、贵的海鲜不是鲜活。"
+  },
+  {
+    "id": "sao-huanying-long",
+    "name": "欢迎来龍餐馆",
+    "match": ["欢迎来龍", "欢迎来龙"],
+    "tags": ["湘菜", "家常", "平价", "快", "大爷点评"],
+    "cuisine": "湘菜家常",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：便宜基础款食材拼工艺，对得起价格。更像湘菜风味家常菜，适合工作餐。"
+  },
+  {
+    "id": "sao-hui-ramen",
+    "name": "惠·日式拉面",
+    "match": ["惠·日式拉面", "惠日式拉面"],
+    "tags": ["拉面", "日料", "面", "大爷点评"],
+    "cuisine": "日式拉面",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：猪味+碱水味博多拉面，有浮油层的酱油拉面。正宗但不一定人人吃得惯。"
+  },
+  {
+    "id": "sao-changlinke",
+    "name": "常连客",
+    "match": ["常连客"],
+    "tags": ["拉面", "日料", "面", "味增", "大爷点评"],
+    "cuisine": "日式拉面",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：札幌味增汤浓醇鲜美，不喜欢猪味可以来。寅一的面仍是他认的大连最佳碱水面。"
+  },
+  {
+    "id": "sao-heyi-jibaitang",
+    "name": "禾一鸡白汤",
+    "match": ["禾一鸡白汤"],
+    "tags": ["拉面", "日料", "面", "大爷点评"],
+    "cuisine": "日式拉面",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：点评低分但鸡白汤还原度巨高，面条和汤底都是日本热门店同款。吃不惯≠难吃。"
+  },
+  {
+    "id": "sao-xiangfeng-unagi",
+    "name": "翔峰炭火鳗鱼",
+    "match": ["翔峰炭火鳗鱼", "翔峰"],
+    "tags": ["日料", "鳗鱼", "米饭", "大爷点评"],
+    "cuisine": "鳗鱼饭",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：把刺挑干净的鳗鱼饭比日本还夯。别的菜没亮点，下次只吃鳗鱼饭。"
+  },
+  {
+    "id": "sao-yingmu-qianhe",
+    "name": "樱木千鹤",
+    "match": ["樱木千鹤"],
+    "tags": ["日料", "定食", "清淡", "大爷点评"],
+    "cuisine": "日本料理",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：高端日料不让人失望。8.1 是因为刺身/海鲜饭溢价、菜谱不是每道都好吃，点对了钱不冤。"
+  },
+  {
+    "id": "sao-siyuexuan",
+    "name": "四季酒店·玺玥轩",
+    "match": ["玺玥轩", "四季酒店"],
+    "tags": ["粤菜", "宴请", "大爷点评", "避雷"],
+    "cuisine": "粤菜",
+    "priceLevel": 4,
+    "status": "skip",
+    "notes": "大爷点评：有复刻利苑的冰层三烧肉，也有 500+ 客诉单品。溢价在「四季」两个字，7 分不配这个价。"
+  },
+  {
+    "id": "sao-manling",
+    "name": "曼听小寨",
+    "match": ["曼听小寨"],
+    "tags": ["辣", "滇菜", "炒", "大爷点评"],
+    "cuisine": "云南菜",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：论辣炒还是很权威。"
+  },
+  {
+    "id": "sao-chaocai-siji",
+    "name": "潮彩四季",
+    "match": ["潮彩四季"],
+    "tags": ["粤菜", "卤鹅", "聚餐", "大爷点评"],
+    "cuisine": "粤菜",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：卤鹅能打。招牌脆皮鸡只有鸡皮好吃；海胆肠粉用料扎实但适得其反。"
+  },
+  {
+    "id": "sao-solotree",
+    "name": "Solo Tree Pizzeria",
+    "match": ["solo tree", "solotree"],
+    "tags": ["披萨", "西餐", "大爷点评"],
+    "cuisine": "披萨",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评老店新吃：8.4，正宗外地味，愿意二刷三刷。"
+  },
+  {
+    "id": "sao-xihuan-dapanji",
+    "name": "喜欢大盘鸡",
+    "match": ["喜欢大盘鸡"],
+    "tags": ["新疆菜", "大盘鸡", "聚餐", "大爷点评"],
+    "cuisine": "新疆菜",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评老店新吃：8.5，正宗外地味，愿意二刷三刷。"
+  },
+  {
+    "id": "sao-shuahuo",
+    "name": "耍火热炒店",
+    "match": ["耍火热炒店", "耍火"],
+    "tags": ["炒", "辣", "家常", "大爷点评"],
+    "cuisine": "热炒",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评老店新吃：8→8.1，正宗外地味，愿意二刷。"
+  },
+  {
+    "id": "sao-dabao-luo",
+    "name": "大宝罗",
+    "match": ["大宝罗"],
+    "tags": ["披萨", "海胆", "西餐", "大爷点评"],
+    "cuisine": "披萨",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：海胆披萨拿坡里饼皮比 wherewhere 强，精致度不如 Solo Tree，性价比平替。"
+  },
+  {
+    "id": "sao-fengmu",
+    "name": "烽木",
+    "match": ["烽木"],
+    "tags": ["烤肉", "聚餐", "大爷点评"],
+    "cuisine": "烤肉",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：菊花炭顶级，肉高于大连平均但鲜度香度不够，料面面俱到没有惊艳款。"
+  },
+  {
+    "id": "sao-beitai",
+    "name": "北丐先生",
+    "match": ["北丐先生"],
+    "tags": ["烧烤", "串", "大爷点评"],
+    "cuisine": "烧烤",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：低分但复购。7→8，第一次华南店人少、串是凉的。"
+  },
+  {
+    "id": "sao-shuanshiduo",
+    "name": "涮士多",
+    "match": ["涮士多"],
+    "tags": ["火锅", "涮", "大爷点评"],
+    "cuisine": "火锅",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评：低分但复购。7.5→8，第一次食材质量没这么好。"
+  },
+  {
+    "id": "sao-dashu",
+    "name": "大树餐厅",
+    "match": ["大树餐厅"],
+    "tags": ["粤菜", "乳鸽", "聚餐", "大爷点评"],
+    "cuisine": "粤菜",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：招牌乳鸽很能打，一份招牌养活一家店。有羊毛可屯。"
+  },
+  {
+    "id": "sao-chaoma",
+    "name": "抄麻四川抄手",
+    "match": ["抄麻"],
+    "tags": ["川菜", "面", "辣", "快", "大爷点评"],
+    "cuisine": "川菜",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：羊毛里挖出来的好店（265期）。"
+  },
+  {
+    "id": "sao-heudiuyizhiixie",
+    "name": "喝丢一只鞋海鲜烧烤",
+    "match": ["喝丢一只鞋"],
+    "tags": ["海鲜", "烧烤", "啤酒", "周五", "大爷点评"],
+    "cuisine": "海鲜烧烤",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评老店新吃：8.1→8，夏天撸串看球。"
+  },
+  {
+    "id": "sao-niuniu-xiaolu",
+    "name": "牛牛小炉子",
+    "match": ["牛牛小炉子"],
+    "tags": ["烧烤", "啤酒", "周五", "大爷点评"],
+    "cuisine": "烧烤",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评老店新吃：7→7.9，夏天撸串看球。"
+  },
+  {
+    "id": "sao-jinhu-maxiao",
+    "name": "金湖麻小",
+    "match": ["金湖麻小"],
+    "tags": ["小龙虾", "辣", "周五", "大爷点评"],
+    "cuisine": "小龙虾",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评老店新吃：8.5→9，冰醉单品，不减盐不减麻不减辣。"
+  },
+  {
+    "id": "sao-mingji",
+    "name": "鸣记烤鱼（罗斯福店）",
+    "match": ["鸣记"],
+    "tags": ["烤鱼", "辣", "聚餐", "周五", "大爷点评"],
+    "cuisine": "烤鱼",
+    "area": "中山区·罗斯福",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评老店新吃：鸣记脆皮烤鱼 7.8→8.1。"
+  },
+  {
+    "id": "sao-yujingxiang",
+    "name": "渝井巷",
+    "match": ["渝井巷"],
+    "tags": ["川菜", "辣", "小龙虾", "大爷点评"],
+    "cuisine": "川菜",
+    "priceLevel": 2,
+    "status": "want",
+    "notes": "大爷点评老店新吃：8→7.9。"
+  },
+  {
+    "id": "sao-andong",
+    "name": "安东",
+    "match": ["安东"],
+    "tags": ["汤", "家常", "大爷点评"],
+    "cuisine": "汤馆",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：汤里肉的品质能打，会回购。"
+  },
+  {
+    "id": "sao-dayang",
+    "name": "大羊",
+    "match": ["大羊"],
+    "tags": ["羊汤", "家常", "大爷点评"],
+    "cuisine": "羊汤",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：品控不犯病就是能打，会回购。"
+  },
+  {
+    "id": "sao-hutan-yangtang",
+    "name": "虎滩羊汤",
+    "match": ["虎滩羊汤"],
+    "tags": ["羊汤", "羊肉串", "家常", "大爷点评"],
+    "cuisine": "羊汤",
+    "area": "中山区·老虎滩",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：市区内最夯羊汤。10 块羊肉大串和需预定的烤羊腿也夯，主食还有提升空间。"
+  },
+  {
+    "id": "sao-our-bakery",
+    "name": "OUR Bakery",
+    "match": ["our bakery"],
+    "tags": ["西餐", "面包", "意面", "牛肉饭", "大爷点评"],
+    "cuisine": "西餐烘焙",
+    "priceLevel": 3,
+    "status": "want",
+    "notes": "大爷点评：贵是真贵、夯也是真夯。蒜香牛肉饭和罗杰意面念念不忘；舒芙蕾拉完了。"
+  },
+  {
+    "id": "sao-qizhen-mixian",
+    "name": "琦桢米线",
+    "match": ["琦桢米线"],
+    "tags": ["米线", "面", "快", "大爷点评"],
+    "cuisine": "米线",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：达沃斯市集附近，米线还挺好吃。"
+  },
+  {
+    "id": "sao-sunjiagou",
+    "name": "孙家沟炸串",
+    "match": ["孙家沟炸串"],
+    "tags": ["炸串", "小吃", "快", "大爷点评"],
+    "cuisine": "小吃",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：炸串可以，冷面夹很一般。"
+  },
+  {
+    "id": "sao-wangfanxing",
+    "name": "王繁星",
+    "match": ["王繁星"],
+    "tags": ["面", "上海菜", "快", "大爷点评"],
+    "cuisine": "上海面馆",
+    "priceLevel": 1,
+    "status": "want",
+    "notes": "大爷点评：只建议招牌口味拌面。清爽减糖版浓油赤酱咸甜口，可加辣。总体跟阿大排档差不多。"
+  },
+  {
+    "id": "sao-shan-huanhuan",
+    "name": "山缓缓火锅",
+    "match": ["山缓缓"],
+    "tags": ["火锅", "聚餐", "大爷点评"],
+    "cuisine": "火锅",
+    "priceLevel": 3,
+    "status": "neutral",
+    "notes": "大爷点评：品质水准之上，追不上溢价，看有没有折扣。羊肚可以一试。"
+  },
+  {
+    "id": "sao-zhuangzhuang",
+    "name": "壮壮家常菜",
+    "match": ["壮壮家常菜"],
+    "tags": ["家常", "大连菜", "大爷点评", "避雷"],
+    "cuisine": "家常菜",
+    "priceLevel": 2,
+    "status": "skip",
+    "notes": "大爷点评：满桌子酸甜过油菜，味型上限有限，可平替的店太多，没必要排队。"
+  },
+  {
+    "id": "sao-yeli",
+    "name": "野力肥牛火锅",
+    "match": ["野力肥牛"],
+    "tags": ["火锅", "肥牛", "大爷点评", "避雷"],
+    "cuisine": "火锅",
+    "priceLevel": 3,
+    "status": "skip",
+    "notes": "大爷点评：2026 必吃榜但锅底和海鲜汁都很普通，食材也不平价。情怀硬上必吃榜叫坑人。"
+  },
+  {
+    "id": "sao-wuxianxiaxiang",
+    "name": "无限虾享",
+    "match": ["无限虾享"],
+    "tags": ["海鲜", "小龙虾", "辣炒", "大爷点评", "避雷"],
+    "cuisine": "辣炒海鲜",
+    "priceLevel": 2,
+    "status": "skip",
+    "notes": "大爷点评：调味普通，虾不新鲜，游客次抛店。辣炒海鲜店 top1 居然是椒盐玉米。"
+  },
+  {
+    "id": "sao-ailonglong",
+    "name": "爱龙龙",
+    "match": ["爱龙龙", "爱龍龍"],
+    "tags": ["日料", "和牛", "海胆", "大爷点评", "避雷"],
+    "cuisine": "日本料理",
+    "priceLevel": 4,
+    "status": "skip",
+    "notes": "大爷点评：只有和牛可以，海鲜这个价是搞笑。噱头和视觉大于食材和调味。"
+  },
+  {
+    "id": "sao-kangfu-mian",
+    "name": "康福面馆",
+    "match": ["康福面馆"],
+    "tags": ["面", "浇头面", "大爷点评", "避雷"],
+    "cuisine": "面馆",
+    "priceLevel": 1,
+    "status": "skip",
+    "notes": "大爷点评：大连浇头面跟风营销，人们排队吃饭、店铺排队倒闭。"
+  },
+  {
+    "id": "sao-wujie",
+    "name": "五姐菜馆",
+    "match": ["五姐菜馆"],
+    "tags": ["家常", "烧烤", "大爷点评", "避雷"],
+    "cuisine": "家常菜",
+    "priceLevel": 1,
+    "status": "skip",
+    "notes": "大爷点评：鲜切和大油边性价比小夯，别的奥尔良半成品。开车 20 公里不值。"
+  },
+  {
+    "id": "sao-chuange",
+    "name": "船歌鱼水饺",
+    "match": ["船歌鱼水饺"],
+    "tags": ["饺子", "海鲜", "大爷点评", "避雷"],
+    "cuisine": "饺子",
+    "priceLevel": 2,
+    "status": "skip",
+    "notes": "大爷点评：乏善可陈。喜欢山东厚皮可试鲍鱼和海胆味，实测山姆速冻更实惠。"
+  },
+  {
+    "id": "sao-chuanwangjiao",
+    "name": "川旺角",
+    "match": ["川旺角"],
+    "tags": ["川菜", "辣", "大爷点评", "避雷"],
+    "cuisine": "川菜",
+    "priceLevel": 3,
+    "status": "skip",
+    "notes": "大爷点评：溢价在环境，这味道放四川没人吃。只适合想吃辣但人菜瘾大。"
+  },
+  {
+    "id": "sao-chuanhuayi",
+    "name": "川花衣",
+    "match": ["川花衣"],
+    "tags": ["川菜", "辣", "大爷点评", "避雷"],
+    "cuisine": "川菜",
+    "priceLevel": 2,
+    "status": "skip",
+    "notes": "大爷点评：宣传打广告挺大劲，菜品差距大，好的挺好，拉的就拉完了。"
+  },
+  {
+    "id": "sao-eji",
+    "name": "鹅记好吃店",
+    "match": ["鹅记好吃店"],
+    "tags": ["甜品", "糖水", "大爷点评"],
+    "cuisine": "糖水铺",
+    "priceLevel": 1,
+    "status": "neutral",
+    "notes": "大爷点评：舒适有余惊喜不足。酸奶酪冰沙是唯一亮点。"
+  }
+]

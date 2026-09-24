@@ -1,9 +1,11 @@
 node_modules
 .next
-.ssh/
 out
 data/places.local.json
+data/*.db
+data/*.db-*
 .env
 .env.local
 *.log
 .DS_Store
+tsconfig.tsbuildinfo
