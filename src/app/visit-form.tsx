@@ -22,6 +22,8 @@ export function VisitForm({
   const [extra, setExtra] = useState("");
   const [note, setNote] = useState("");
   const [keep, setKeep] = useState<PlaceStatus>("want");
+  const [rating, setRating] = useState<number | undefined>(undefined);
+  const [perCapita, setPerCapita] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -47,6 +49,8 @@ export function VisitForm({
           dishes: [...selected, ...extraDishes],
           note,
           keep,
+          rating,
+          perCapita: perCapita.trim() ? Number(perCapita) : undefined,
         }),
       });
       if (!response.ok) {
@@ -63,7 +67,21 @@ export function VisitForm({
 
   return (
     <div className="mt-3 rounded-2xl border border-[#ead9c8] bg-[#fffaf3] p-4">
-      <p className="text-sm text-[#6b5e55]">记下这一餐 · {place.name}</p>
+      <p className="text-sm text-[#6b5e55]">{place.name}</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {[1, 2, 3, 4, 5].map((value) => (
+          <button
+            key={value}
+            type="button"
+            className={`rounded-full px-3 py-1 text-sm ${
+              rating === value ? "bg-[#1c1612] text-white" : "bg-white text-[#4a3f38]"
+            }`}
+            onClick={() => setRating(value)}
+          >
+            {value} 分
+          </button>
+        ))}
+      </div>
       {place.dishes?.length ? (
         <div className="mt-3 flex flex-wrap gap-2">
           {place.dishes.map((dish) => {
@@ -83,19 +101,26 @@ export function VisitForm({
           })}
         </div>
       ) : (
-        <p className="mt-2 text-sm text-[#6b5e55]">还没有招牌菜，下面自己填也行。</p>
+        null
       )}
       <input
-        className="mt-3 w-full rounded-2xl border border-[#ead9c8] bg-white px-3 py-2 text-sm"
+        className="fb-input mt-3 text-sm"
         value={extra}
         onChange={(event) => setExtra(event.target.value)}
-        placeholder="还点了什么，逗号分开"
+        placeholder="菜"
       />
       <textarea
         className="mt-2 min-h-20 w-full rounded-2xl border border-[#ead9c8] bg-white p-3 text-sm"
         value={note}
         onChange={(event) => setNote(event.target.value)}
-        placeholder="这一顿怎么样"
+        placeholder="备注"
+      />
+      <input
+        className="fb-input mt-2 text-sm"
+        value={perCapita}
+        onChange={(event) => setPerCapita(event.target.value)}
+        placeholder="人均"
+        inputMode="numeric"
       />
       <div className="mt-3 flex flex-wrap gap-2">
         {KEEP_OPTIONS.map((option) => (

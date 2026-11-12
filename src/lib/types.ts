@@ -16,6 +16,8 @@ export type Visit = {
   note?: string;
   dishes?: string[];
   keep?: PlaceStatus;
+  rating?: number;
+  perCapita?: number;
 };
 
 export type Place = {
@@ -34,8 +36,32 @@ export type Place = {
   createdAt: string;
   lat?: number;
   lng?: number;
+  amapPoiId?: string;
+  tel?: string;
+  amapRating?: number;
+  amapCost?: number;
+  openTime?: string;
+  amapTag?: string;
+  amapStatus?: string;
   dishes?: Dish[];
   visits?: Visit[];
+};
+
+export type ShopCandidate = {
+  poiId: string;
+  name: string;
+  label: string;
+  address?: string;
+  area?: string;
+  tel?: string;
+  cuisine?: string;
+  tags: string[];
+  rating?: number;
+  cost?: number;
+  openTime?: string;
+  feature?: string;
+  lat: number;
+  lng: number;
 };
 
 export type PlaceFilter = {
@@ -70,13 +96,28 @@ export type RecommendRequest = {
   lat?: number;
   lng?: number;
   cityBias?: string;
+  here?: boolean;
+  spin?: boolean;
+  fromIp?: boolean;
 };
+
+export type PlaceSuggestion = {
+  name: string;
+  label: string;
+  lat?: number;
+  lng?: number;
+};
+
+export type TravelMode = "walk" | "drive";
 
 export type RecommendResult = {
   place: Place;
   reason: string;
   score: number;
   distanceKm?: number;
+  durationMin?: number;
+  travelMode?: TravelMode;
+  closed?: boolean;
 };
 
 export type VisitLogRequest = {
@@ -84,4 +125,6 @@ export type VisitLogRequest = {
   dishes?: string[];
   note?: string;
   keep?: PlaceStatus;
+  rating?: number;
+  perCapita?: number;
 };

@@ -1,13 +1,19 @@
 {
   "name": "friday-bite",
-  "version": "0.1.0",
+  "version": "0.1.11",
   "private": true,
+  "description": "私人店库，到了地方再决定吃什么",
+  "author": "Eleazer",
+  "main": "electron/main.cjs",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "desktop": "electron .",
+    "icons": "node scripts/make-icons.cjs",
+    "dist": "node scripts/make-icons.cjs && next build --webpack && node scripts/prepare-standalone.cjs && electron-builder --win nsis"
   },
   "dependencies": {
     "@libsql/client": "^0.18.0",
@@ -22,9 +28,49 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
     "drizzle-kit": "^0.31.10",
+    "electron": "^39.8.10",
+    "electron-builder": "^26.15.3",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.3.3",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
+  },
+  "build": {
+    "appId": "com.lighgel.fridaybite",
+    "productName": "FridayBite",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "compression": "store",
+    "electronLanguages": ["zh-CN", "en-US"],
+    "files": [
+      "electron/**/*",
+      "!node_modules/**"
+    ],
+    "extraResources": [
+      {
+        "from": "pack/standalone.zip",
+        "to": "standalone.zip"
+      }
+    ],
+    "asar": true,
+    "npmRebuild": false,
+    "electronDist": "node_modules/electron/dist",
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "周五吃啥",
+      "artifactName": "FridayBite-Setup-${version}.${ext}"
+    }
   }
 }

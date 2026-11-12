@@ -1,26 +1,23 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Nav } from "./nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "FridayBite 周五吃啥",
-  description: "从你自己的收藏里，按心情选出今天吃哪家",
+  description: "周五吃啥",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN">
       <body>
-        <div className="mx-auto min-h-screen max-w-3xl px-4 py-6">
-          <header className="mb-6 flex items-end justify-between gap-4">
+        <div className="mx-auto min-h-screen max-w-xl px-4 pb-16 pt-5">
+          <header className="mb-8 flex items-center justify-between gap-4">
             <div>
-              <p className="text-sm tracking-wide text-[#c45c26]">FridayBite</p>
-              <h1 className="text-2xl font-semibold">周五吃啥</h1>
+              <p className="text-xs tracking-[0.22em] text-[#c45c26]">FRIDAYBITE</p>
+              <p className="text-lg font-semibold tracking-tight">今天吃哪家</p>
             </div>
-            <nav className="flex gap-4 text-sm">
-              <Link href="/">现在吃什么</Link>
-              <Link href="/places">我的店库</Link>
-            </nav>
+            <Nav />
           </header>
           {children}
         </div>

@@ -18,6 +18,13 @@ export const places = sqliteTable(
     createdAt: text("created_at").notNull(),
     lat: real("lat"),
     lng: real("lng"),
+    amapPoiId: text("amap_poi_id"),
+    tel: text("tel"),
+    amapRating: real("amap_rating"),
+    amapCost: integer("amap_cost"),
+    openTime: text("open_time"),
+    amapTag: text("amap_tag"),
+    amapStatus: text("amap_status"),
   },
   (table) => [
     uniqueIndex("places_name_key_idx").on(table.nameKey),
@@ -77,6 +84,8 @@ export const visits = sqliteTable(
     note: text("note"),
     dishesEaten: text("dishes_eaten"),
     keep: text("keep"),
+    rating: real("rating"),
+    perCapita: integer("per_capita"),
   },
   (table) => [index("visits_place_idx").on(table.placeId)],
 );

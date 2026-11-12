@@ -4,8 +4,10 @@ import type { LibSQLDatabase } from "drizzle-orm/libsql";
 import * as schema from "./schema";
 import { localJsonFile, saoFile, seedFile } from "./paths";
 import { distanceKm, withinRadius, type Origin } from "@/lib/geo";
-import { geocode, placeQuery } from "@/lib/geocode";
-import type { Dish, Place, PlaceFacets, PlaceFilter, PlaceSource, PlaceStatus, Visit } from "@/lib/types";
+import { locateSavedPlace } from "@/lib/geocode";
+import { AmapError, fetchShopDetail, matchShopForPlace } from "@/lib/amap";
+import { mergeNotes, parseNotePaste } from "@/lib/parse";
+import type { Dish, Place, PlaceFacets, PlaceFilter, PlaceSource, PlaceStatus, ShopCandidate, Visit } from "@/lib/types";
 
 type Database = LibSQLDatabase<typeof schema>;
 
@@ -123,6 +125,8 @@ export async function queryPlaces(db: Database, filter: PlaceFilter = {}): Promi
       note: row.note ?? undefined,
       dishes: parseDishesEaten(row.dishesEaten),
       keep: STATUSES.has(row.keep as PlaceStatus) ? (row.keep as PlaceStatus) : undefined,
+      rating: row.rating ?? undefined,
+      perCapita: row.perCapita ?? undefined,
     });
     visitsByPlace.set(row.placeId, list);
   }
@@ -156,8 +160,14 @@ export async function ensurePlaceCoords(
       next.push(place);
       continue;
     }
-    const query = placeQuery(place);
-    const hit = query ? await geocode(db, query, cityBias) : undefined;
+    let hit;
+    try {
+      hit = place.name.trim() ? await locateSavedPlace(db, place, cityBias) : undefined;
+    } catch (error) {
+      console.warn(`skip ${place.name}: ${error instanceof Error ? error.message : error}`);
+      next.push(place);
+      continue;
+    }
     if (!hit) {
       next.push(place);
       continue;
@@ -239,11 +249,13 @@ export async function addDishRow(
 
 export async function logVisitRow(
   db: Database,
-  input: { placeId: string; dishes?: string[]; note?: string; keep?: PlaceStatus },
+  input: { placeId: string; dishes?: string[]; note?: string; keep?: PlaceStatus; rating?: number; perCapita?: number },
 ): Promise<void> {
   const visitedAt = new Date().toISOString();
   const keep = input.keep && STATUSES.has(input.keep) ? input.keep : "want";
   const dishes = [...new Set((input.dishes ?? []).map((name) => name.trim()).filter(Boolean))];
+  const rating = clampRating(input.rating);
+  const perCapita = Number.isFinite(input.perCapita) && (input.perCapita as number) > 0 ? Math.round(input.perCapita as number) : null;
   await db
     .update(schema.places)
     .set({ lastVisitedAt: visitedAt, status: keep })
@@ -255,10 +267,282 @@ export async function logVisitRow(
     note: input.note?.trim() || null,
     dishesEaten: dishes.length ? JSON.stringify(dishes) : null,
     keep,
+    rating,
+    perCapita,
   });
   for (const name of dishes) {
     await addDishRow(db, input.placeId, name);
   }
+}
+
+export async function saveShopCandidate(db: Database, shop: ShopCandidate): Promise<{ existed: boolean }> {
+  const poiId = shop.poiId.trim();
+  const nameKey = normalizeName(shop.name);
+  if (!poiId || !nameKey) return { existed: false };
+  const byPoi = await db.select().from(schema.places).where(eq(schema.places.amapPoiId, poiId)).limit(1);
+  const byName = await db.select().from(schema.places).where(eq(schema.places.nameKey, nameKey)).limit(1);
+  const existing = byPoi[0] ?? byName[0];
+  const tags = [...new Set([...(shop.tags ?? []), shop.cuisine].filter((item): item is string => Boolean(item)))];
+  if (existing) {
+    await applyAmapDetails(db, existing, shop, { addTags: true });
+    return { existed: true };
+  }
+  const place: Place = {
+    id: crypto.randomUUID(),
+    name: shop.name.trim(),
+    tags,
+    cuisine: shop.cuisine,
+    area: shop.area,
+    address: shop.address,
+    source: "map",
+    status: "want",
+    createdAt: new Date().toISOString(),
+    lat: shop.lat,
+    lng: shop.lng,
+    amapPoiId: poiId,
+    tel: shop.tel,
+    amapRating: shop.rating,
+    amapCost: shop.cost,
+    openTime: shop.openTime,
+    priceLevel: shop.cost != null ? costToPriceLevel(shop.cost) : undefined,
+  };
+  await writePlace(db, place, { recordVisit: false });
+  return { existed: false };
+}
+
+function clampRating(value?: number): number | null {
+  if (!Number.isFinite(value)) return null;
+  const stepped = Math.round((value as number) * 2) / 2;
+  return Math.min(5, Math.max(0.5, stepped));
+}
+
+function costToPriceLevel(cost: number): number {
+  if (cost < 40) return 1;
+  if (cost < 80) return 2;
+  if (cost < 150) return 3;
+  return 4;
+}
+
+export function needsAmapDetails(place: Place): boolean {
+  if (place.amapStatus === "unmatched") return false;
+  if (place.amapStatus === "ok") return false;
+  return true;
+}
+
+export async function resetUnmatchedPlaces(db: Database): Promise<number> {
+  const rows = await db
+    .select({ id: schema.places.id })
+    .from(schema.places)
+    .where(eq(schema.places.amapStatus, "unmatched"));
+  if (!rows.length) return 0;
+  await db.update(schema.places).set({ amapStatus: null }).where(eq(schema.places.amapStatus, "unmatched"));
+  return rows.length;
+}
+
+export async function enrichPlaceRow(
+  db: Database,
+  place: Place,
+  cityBias?: string,
+  force = false,
+): Promise<"updated" | "unmatched"> {
+  if (place.name === "某烧烤") {
+    const skip = (
+      await db.select().from(schema.places).where(eq(schema.places.id, place.id)).limit(1)
+    )[0];
+    if (!skip) return "unmatched";
+    await db.update(schema.places).set({ amapStatus: "unmatched" }).where(eq(schema.places.id, place.id));
+    return "unmatched";
+  }
+  let shop = place.amapPoiId && !force ? await fetchShopDetail(place.amapPoiId) : undefined;
+  if (!shop) {
+    shop = await matchShopForPlace(place.name, cityBias, {
+      area: place.area,
+      cuisine: place.cuisine,
+      tags: place.tags,
+    });
+  }
+  const row = (
+    await db.select().from(schema.places).where(eq(schema.places.id, place.id)).limit(1)
+  )[0];
+  if (!row) return "unmatched";
+  if (!shop) {
+    await db.update(schema.places).set({ amapStatus: "unmatched" }).where(eq(schema.places.id, place.id));
+    return "unmatched";
+  }
+  await applyAmapDetails(db, row, shop, { addTags: false });
+  return "updated";
+}
+
+export async function enrichMissingPlaces(
+  db: Database,
+  cityBias: string | undefined,
+  options: { placeId?: string; limit?: number },
+): Promise<{ updated: string[]; unmatched: string[]; remaining: number; missing: number }> {
+  const all = await queryPlaces(db);
+  const targets = options.placeId
+    ? all.filter((place) => place.id === options.placeId)
+    : all.filter(needsAmapDetails);
+  const batch = targets.slice(0, Math.max(1, Math.min(options.limit ?? 8, 12)));
+  const updated: string[] = [];
+  const unmatched: string[] = [];
+  for (const place of batch) {
+    try {
+      const result = await enrichPlaceRow(db, place, cityBias, Boolean(options.placeId));
+      if (result === "updated") updated.push(place.name);
+      else unmatched.push(place.name);
+    } catch (error) {
+      if (error instanceof AmapError && (error.message.includes("额度") || error.message.includes("CUQPS"))) throw error;
+      console.error(JSON.stringify({ enrichError: place.name, error: String(error) }));
+      unmatched.push(place.name);
+    }
+  }
+  const stats = await amapFillStats(db);
+  return {
+    updated,
+    unmatched,
+    remaining: stats.missing,
+    missing: stats.missing,
+  };
+}
+
+export async function amapFillStats(db: Database): Promise<{ missing: number; unmatched: number; filled: number; total: number }> {
+  const rows = await db
+    .select({
+      amapPoiId: schema.places.amapPoiId,
+      tel: schema.places.tel,
+      amapRating: schema.places.amapRating,
+      amapStatus: schema.places.amapStatus,
+    })
+    .from(schema.places);
+  const total = rows.length;
+  let filled = 0;
+  let unmatched = 0;
+  let missing = 0;
+  for (const row of rows) {
+    if (row.amapStatus === "unmatched") unmatched += 1;
+    else if (row.amapStatus === "ok" || (row.amapPoiId && (row.tel || row.amapRating != null))) filled += 1;
+    else missing += 1;
+  }
+  return { missing, unmatched, filled, total };
+}
+
+async function applyAmapDetails(
+  db: Database,
+  existing: typeof schema.places.$inferSelect,
+  shop: ShopCandidate,
+  options: { addTags: boolean },
+): Promise<void> {
+  const poiId = shop.poiId.trim();
+  await db
+    .update(schema.places)
+    .set({
+      amapPoiId: poiId,
+      address: existing.address || shop.address || null,
+      area: existing.area || shop.area || null,
+      cuisine: existing.cuisine || shop.cuisine || null,
+      tel: shop.tel ?? existing.tel,
+      amapRating: shop.rating ?? existing.amapRating,
+      amapCost: shop.cost ?? existing.amapCost,
+      openTime: shop.openTime ?? existing.openTime,
+      amapTag: shop.feature ?? existing.amapTag,
+      amapStatus: "ok",
+      priceLevel: existing.priceLevel ?? (shop.cost != null ? costToPriceLevel(shop.cost) : null),
+      lat: shop.lat,
+      lng: shop.lng,
+    })
+    .where(eq(schema.places.id, existing.id));
+  await attachAmapSource(db, existing.id, poiId);
+  if (shop.feature) {
+    const existingDishes = await db.select({ id: schema.dishes.id }).from(schema.dishes).where(eq(schema.dishes.placeId, existing.id)).limit(1);
+    if (!existingDishes[0]) {
+      for (const name of shop.feature.split(/[,，、/|]/).map((part) => part.trim()).filter((part) => part.length >= 2)) {
+        await addDishRow(db, existing.id, name);
+      }
+    }
+  }
+  if (!options.addTags) return;
+  const tags = [...new Set([...(shop.tags ?? []), shop.cuisine].filter((item): item is string => Boolean(item)))];
+  for (const name of tags) {
+    const tagId = await ensureTag(db, name);
+    await db.insert(schema.placeTags).values({ placeId: existing.id, tagId }).onConflictDoNothing();
+  }
+}
+
+async function attachAmapSource(db: Database, placeId: string, poiId: string): Promise<void> {
+  await db
+    .insert(schema.placeSources)
+    .values({
+      id: crypto.randomUUID(),
+      placeId,
+      source: "map",
+      externalId: poiId,
+      url: null,
+    })
+    .onConflictDoUpdate({
+      target: [schema.placeSources.placeId, schema.placeSources.source],
+      set: { externalId: poiId },
+    });
+}
+
+export async function attachNoteToPlace(
+  db: Database,
+  placeId: string,
+  note: string,
+): Promise<{ attached: string[]; missed: string[] }> {
+  const places = await queryPlaces(db);
+  const place = places.find((item) => item.id === placeId);
+  if (!place) return { attached: [], missed: [placeId] };
+  return writeAttachedNote(db, place, note);
+}
+
+export async function attachNotesFromText(
+  db: Database,
+  raw: string,
+): Promise<{ attached: string[]; missed: string[] }> {
+  const places = await queryPlaces(db);
+  const clips = parseNotePaste(
+    raw,
+    places.map((place) => place.name),
+  );
+  const attached: string[] = [];
+  const missed: string[] = [];
+  const used = new Set<string>();
+  for (const clip of clips) {
+    const hit = places.find((place) => !used.has(place.id) && namesMatch(place.name, clip.name));
+    if (!hit) {
+      missed.push(clip.name);
+      continue;
+    }
+    used.add(hit.id);
+    const result = await writeAttachedNote(db, hit, clip.note);
+    attached.push(...result.attached);
+    hit.notes = mergeNotes(hit.notes, clip.note);
+    if (/大爷点评/.test(clip.note) && !hit.tags.includes("大爷点评")) hit.tags = [...hit.tags, "大爷点评"];
+  }
+  return { attached, missed };
+}
+
+async function writeAttachedNote(
+  db: Database,
+  place: Place,
+  note: string,
+): Promise<{ attached: string[]; missed: string[] }> {
+  const merged = mergeNotes(place.notes, note);
+  if (!merged) return { attached: [], missed: [] };
+  const tags = [...place.tags];
+  if (/大爷点评/.test(note) && !tags.includes("大爷点评")) tags.push("大爷点评");
+  await upsertPlaceRow(db, { ...place, notes: merged, tags });
+  return { attached: [place.name], missed: [] };
+}
+
+function namesMatch(existing: string, incoming: string): boolean {
+  const left = compactName(existing);
+  const right = compactName(incoming);
+  if (!left || !right) return false;
+  if (left === right) return true;
+  const shorter = left.length < right.length ? left : right;
+  if (shorter.length < 4) return false;
+  return left.includes(right) || right.includes(left);
 }
 
 export async function addPlaceRows(db: Database, newPlaces: Place[]): Promise<void> {
@@ -293,6 +577,13 @@ async function writePlace(
     createdAt: place.createdAt,
     lat: place.lat ?? null,
     lng: place.lng ?? null,
+    amapPoiId: place.amapPoiId ?? null,
+    tel: place.tel ?? null,
+    amapRating: place.amapRating ?? null,
+    amapCost: place.amapCost ?? null,
+    openTime: place.openTime ?? null,
+    amapTag: place.amapTag ?? null,
+    amapStatus: place.amapStatus ?? null,
   };
 
   await db
@@ -313,6 +604,13 @@ async function writePlace(
         status: values.status,
         lastVisitedAt: values.lastVisitedAt,
         ...(place.lat != null && place.lng != null ? { lat: place.lat, lng: place.lng } : {}),
+        ...(place.amapPoiId ? { amapPoiId: place.amapPoiId } : {}),
+        ...(place.tel ? { tel: place.tel } : {}),
+        ...(place.amapRating != null ? { amapRating: place.amapRating } : {}),
+        ...(place.amapCost != null ? { amapCost: place.amapCost } : {}),
+        ...(place.openTime ? { openTime: place.openTime } : {}),
+        ...(place.amapTag ? { amapTag: place.amapTag } : {}),
+        ...(place.amapStatus ? { amapStatus: place.amapStatus } : {}),
       },
     });
 
@@ -323,19 +621,19 @@ async function writePlace(
     await db.insert(schema.placeTags).values({ placeId: place.id, tagId }).onConflictDoNothing();
   }
 
-  if (place.url || place.source) {
+  if (place.url || place.source || place.amapPoiId) {
     await db
       .insert(schema.placeSources)
       .values({
         id: crypto.randomUUID(),
         placeId: place.id,
         source: values.source,
-        externalId: null,
+        externalId: place.amapPoiId ?? null,
         url: place.url ?? null,
       })
       .onConflictDoUpdate({
         target: [schema.placeSources.placeId, schema.placeSources.source],
-        set: { url: place.url ?? null },
+        set: { url: place.url ?? null, externalId: place.amapPoiId ?? null },
       });
   }
 
@@ -447,6 +745,13 @@ function toPlace(
     createdAt: row.createdAt,
     lat: row.lat ?? undefined,
     lng: row.lng ?? undefined,
+    amapPoiId: row.amapPoiId ?? undefined,
+    tel: row.tel ?? undefined,
+    amapRating: row.amapRating ?? undefined,
+    amapCost: row.amapCost ?? undefined,
+    openTime: row.openTime ?? undefined,
+    amapTag: row.amapTag ?? undefined,
+    amapStatus: row.amapStatus ?? undefined,
     dishes,
     visits,
   };

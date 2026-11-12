@@ -6,22 +6,22 @@ export function ChipRow({
   selected,
   onSelect,
 }: {
-  label: string;
+  label?: string;
   options: { value: string; label: string }[];
   selected: string;
   onSelect: (value: string) => void;
 }) {
   return (
-    <div className="mt-4">
-      <p className="mb-2 text-sm text-[#6b5e55]">{label}</p>
+    <div className="mt-3">
+      {label ? <p className="mb-2 text-xs tracking-wide text-[#7a6c62]">{label}</p> : null}
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
           const active = selected === option.value;
           return (
             <button
               key={`${label}-${option.value || "all"}`}
-              className={`rounded-full px-3 py-1 text-sm ${
-                active ? "bg-[#c45c26] text-white" : "bg-[#f3e6d8] text-[#4a3f38]"
+              className={`rounded-full px-3 py-1.5 text-sm transition ${
+                active ? "bg-[#1c1612] text-white" : "bg-[#efe4d6] text-[#4a3f38] hover:bg-[#e8d5c0]"
               }`}
               onClick={() => onSelect(option.value)}
               type="button"

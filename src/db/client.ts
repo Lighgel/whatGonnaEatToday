@@ -5,6 +5,7 @@ import { migrate } from "drizzle-orm/libsql/migrator";
 import { count } from "drizzle-orm";
 import * as schema from "./schema";
 import { dataDir, dbFileUrl, migrationsDir } from "./paths";
+import { importBundledLibrary } from "./import-bundled";
 import { bootstrapPlacesIfEmpty } from "./places";
 
 type Database = ReturnType<typeof drizzle<typeof schema>>;
@@ -22,6 +23,7 @@ async function initDb(): Promise<Database> {
   await client.execute("PRAGMA foreign_keys = ON");
   const db = drizzle(client, { schema });
   await migrate(db, { migrationsFolder: migrationsDir });
+  await importBundledLibrary(client);
   const [{ value }] = await db.select({ value: count() }).from(schema.places);
   if (value === 0) await bootstrapPlacesIfEmpty(db);
   return db;

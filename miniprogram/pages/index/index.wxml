@@ -1,0 +1,82 @@
+<view class="page">
+  <view class="brand">FRIDAYBITE</view>
+  <view class="count-label" wx:if="{{libraryTotal}}">{{libraryTotal}} 家</view>
+
+  <view class="sheet sheet-dark" wx:if="{{fillMissing}}" bindtap="goPlaces">
+    <view class="step-title">补详情 · 还剩 {{fillMissing}}</view>
+  </view>
+
+  <view class="sheet">
+        <view class="loc-row">
+          <input placeholder-class="ph" class="fb-input loc-input" style="margin-top: 0;" placeholder="地点" value="{{location}}" bindinput="onLocation" />
+          <view class="locate-btn" bindtap="useGps">{{locating ? '定位中' : '定位'}}</view>
+        </view>
+        <view class="accent" wx:if="{{originText}}">{{originText}}</view>
+        <view class="accent" wx:if="{{weatherHint}}">{{weatherHint}}</view>
+        <view class="chips">
+          <view class="chip {{radiusKm===item.value ? 'on' : ''}}" wx:for="{{radii}}" wx:key="value" data-value="{{item.value}}" bindtap="onRadius">{{item.label}}</view>
+        </view>
+
+    <view class="rule"></view>
+
+        <input placeholder-class="ph" class="fb-input" placeholder="吃什么" value="{{keywords}}" bindinput="onKeywords" confirm-type="search" bindconfirm="searchHere" />
+        <view class="chips">
+          <view class="chip {{keywords===item ? 'on' : ''}}" wx:for="{{foods}}" wx:key="*this" data-value="{{item}}" bindtap="setFood">{{item}}</view>
+        </view>
+
+    <view class="rule"></view>
+
+        <view class="fb-primary {{busy || locating ? 'off' : ''}}" bindtap="searchHere">{{primaryLabel}}</view>
+        <view class="fb-primary dark {{mapBusy || locating ? 'off' : ''}}" style="margin-top: 16rpx;" bindtap="loadMapShops">{{amapLabel}}</view>
+        <view class="ghost-row">
+          <view class="fb-ghost" bindtap="pick">{{busy === 'pick' ? '在挑…' : '挑 3 家'}}</view>
+          <view class="fb-ghost" bindtap="daily">{{busy === 'daily' ? '在定…' : '今天一家'}}</view>
+          <view class="fb-ghost" bindtap="spin">{{busy === 'spin' ? '在转…' : '转一转'}}</view>
+          <view class="fb-ghost" wx:if="{{results.length}}" bindtap="reroll">{{rerollLabel}}</view>
+          <view class="fb-ghost" wx:if="{{results.length >= 2}}" bindtap="copyShare">发给朋友</view>
+        </view>
+
+    <view class="more" bindtap="toggleMore">{{showMore ? '收起' : '筛选'}}</view>
+    <view class="filters" wx:if="{{showMore}}">
+      <input placeholder-class="ph" class="fb-input tight" value="{{mood}}" bindinput="onMood" placeholder="心情" />
+      <input placeholder-class="ph" class="fb-input tight" value="{{cityBias}}" bindinput="onCity" placeholder="城市" />
+    </view>
+    <view class="error" wx:if="{{error}}">{{error}}</view>
+    <view class="accent" wx:if="{{shareHint}}">{{shareHint}}</view>
+  </view>
+
+  <view class="note" wx:if="{{nearby === false && (origin || location)}}">
+    <view>附近没有收藏。</view>
+  </view>
+  <view class="meta" wx:if="{{mapNote}}" style="margin-top: 16rpx;">{{mapNote}}</view>
+  <view class="caption" wx:if="{{missingCoords}}">{{missingCoords}} 家没坐标</view>
+  <view class="caption" wx:if="{{results.length}}">收藏 · {{results.length}}</view>
+
+  <view class="sheet-white {{item.closed ? 'dim' : ''}}" wx:for="{{results}}" wx:key="id">
+    <view class="head">
+      <view class="head-main">
+        <view class="kicker">{{item.index}}<text wx:if="{{item.openBadge}}"> · {{item.openBadge}}</text></view>
+        <view class="name">{{item.place.name}}</view>
+        <view class="line" wx:if="{{item.sub}}">{{item.sub}}</view>
+        <view class="line" wx:if="{{item.dishes}}">{{item.dishes}}</view>
+      </view>
+      <view class="trip">{{item.trip}}</view>
+    </view>
+    <view class="pills">
+      <view class="pill" data-id="{{item.id}}" bindtap="openMap">导航</view>
+      <view class="pill" data-id="{{item.id}}" data-status="want" bindtap="mark">还想再去</view>
+      <view class="pill" data-id="{{item.id}}" bindtap="visited">今天去了</view>
+      <view class="pill" data-id="{{item.id}}" data-status="skip" bindtap="mark">不想再去</view>
+    </view>
+  </view>
+
+  <view class="caption" wx:if="{{mapShops.length}}">高德 · {{mapShops.length}}</view>
+  <view class="map-card" wx:for="{{mapShops}}" wx:key="poiId">
+    <view class="name" style="font-size: 34rpx;">{{item.name}}</view>
+    <view class="meta">{{item.label}}</view>
+    <view class="pills">
+      <view class="pill" data-id="{{item.poiId}}" bindtap="openMap">导航</view>
+      <view class="pill ink" data-id="{{item.poiId}}" bindtap="saveMapShop">收入店库</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,14 @@
+{
+  "description": "FridayBite 微信小程序（打开本仓库即可）",
+  "miniprogramRoot": "miniprogram/",
+  "compileType": "miniprogram",
+  "appid": "touristappid",
+  "projectname": "FridayBite",
+  "libVersion": "3.7.0",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "minified": true
+  }
+}

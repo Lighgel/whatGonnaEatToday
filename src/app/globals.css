@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #f6f1e8;
-  --ink: #1f1a16;
-  --muted: #6b5e55;
-  --card: #fffaf3;
+  --bg: #f4eee6;
+  --ink: #1c1612;
+  --muted: #7a6c62;
+  --card: #fffcf7;
   --accent: #c45c26;
+  --line: #ead9c8;
 }
 
 * {
@@ -20,6 +21,74 @@ body {
 body {
   margin: 0;
   color: var(--ink);
-  background: radial-gradient(circle at top, #fff7ec, var(--bg));
-  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background:
+    radial-gradient(1200px 480px at 10% -10%, #ffe8d2 0%, transparent 55%),
+    radial-gradient(900px 420px at 110% 0%, #f3e2c8 0%, transparent 50%),
+    var(--bg);
+  font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+.fb-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  padding: 14px 16px;
+  outline: none;
+}
+
+.fb-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(196, 92, 38, 0.15);
+}
+
+.fb-primary {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.fb-primary:disabled {
+  opacity: 0.55;
+}
+
+.fb-ghost {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 4px;
+  font-size: 14px;
+}
+
+.fb-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.fb-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  border-radius: 999px;
+  background: #1c1612;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 28px;
+  text-align: center;
 }

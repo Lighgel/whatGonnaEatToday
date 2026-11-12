@@ -17,6 +17,8 @@ export async function POST(request: Request) {
     dishes: body.dishes,
     note: body.note,
     keep,
+    rating: body.rating,
+    perCapita: body.perCapita,
   });
   return NextResponse.json({ places });
 }

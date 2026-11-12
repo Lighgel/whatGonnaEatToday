@@ -9,3 +9,7 @@ data/*.db-*
 *.log
 .DS_Store
 tsconfig.tsbuildinfo
+release
+pack
+.ssh
+miniprogram/node_modules

@@ -1,0 +1,44 @@
+{
+  "pages": ["pages/index/index", "pages/places/places", "pages/settings/settings"],
+  "window": {
+    "navigationBarTitleText": "今天吃哪家",
+    "navigationBarBackgroundColor": "#f4eee6",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f4eee6",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#7a6c62",
+    "selectedColor": "#c45c26",
+    "backgroundColor": "#fffcf7",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "找店",
+        "iconPath": "assets/tab-eat.png",
+        "selectedIconPath": "assets/tab-eat-on.png"
+      },
+      {
+        "pagePath": "pages/places/places",
+        "text": "店库",
+        "iconPath": "assets/tab-places.png",
+        "selectedIconPath": "assets/tab-places-on.png"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置",
+        "iconPath": "assets/tab-set.png",
+        "selectedIconPath": "assets/tab-set-on.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用来从你的收藏里找出附近的店"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation"],
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

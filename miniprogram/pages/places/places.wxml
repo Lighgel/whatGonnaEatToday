@@ -1,0 +1,68 @@
+<view class="page">
+  <view class="brand">FRIDAYBITE</view>
+  <view class="count" wx:if="{{fill.total}}">{{fill.total}}</view>
+  <view class="count-label" wx:if="{{fill.total}}">家{{places.length !== fill.total ? ' · 列出 ' + places.length : ''}}</view>
+
+  <view class="sheet sheet-dark">
+    <view class="muted" style="color: #ead9c8;">
+      详情 {{fill.filled}}/{{fill.total}}
+      <text wx:if="{{fill.missing}}"> · 剩 {{fill.missing}}</text>
+      <text wx:if="{{fill.unmatched}}"> · 对不上 {{fill.unmatched}}</text>
+    </view>
+    <view class="fb-primary {{enriching || !fill.missing ? 'off' : ''}}" bindtap="enrich">
+      {{enriching ? '在补…' : (fill.missing ? '补详情' : '已补完')}}
+    </view>
+  </view>
+
+  <view class="sheet">
+    <input placeholder-class="ph" class="fb-input" placeholder="店名" value="{{q}}" bindinput="onQ" confirm-type="search" bindconfirm="load" />
+    <view class="loc-row">
+      <input placeholder-class="ph" class="fb-input loc-input" style="margin-top: 0;" placeholder="地点" value="{{near}}" bindinput="onNear" />
+      <view class="locate-btn" bindtap="useHere">定位</view>
+    </view>
+    <view class="accent" wx:if="{{geoNote}}">{{geoNote}}</view>
+    <view class="chips" wx:if="{{near}}">
+      <view class="chip {{radiusKm===item.value ? 'on' : ''}}" wx:for="{{radii}}" wx:key="value" data-value="{{item.value}}" bindtap="onRadius">{{item.label}}</view>
+    </view>
+    <view class="fb-primary dark" bindtap="load">搜收藏</view>
+    <view class="error" wx:if="{{error}}">{{error}}</view>
+  </view>
+
+  <view class="sheet">
+    <input placeholder-class="ph" class="fb-input" placeholder="店名" value="{{shopQuery}}" bindinput="onShopQuery" confirm-type="search" bindconfirm="findShops" />
+    <view class="ghost-row">
+      <view class="fb-ghost" bindtap="toggleVoice">{{listening ? '说完了' : '说店名'}}</view>
+      <view class="fb-ghost" bindtap="pickShopImage">{{reading ? '在认…' : '识图'}}</view>
+    </view>
+    <view class="fb-primary" style="margin-top: 24rpx;" bindtap="findShops">{{shopBusy ? '在找…' : '搜高德'}}</view>
+    <view class="error" wx:if="{{shopMessage}}">{{shopMessage}}</view>
+    <view class="map-card" wx:for="{{shopHits}}" wx:key="poiId">
+      <view class="name" style="font-size: 34rpx;">{{item.name}}</view>
+      <view class="meta">{{item.label}}</view>
+      <view class="pills">
+        <view class="pill ink" data-id="{{item.poiId}}" bindtap="saveShop">{{savingPoi === item.poiId ? '在收…' : '收入店库'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="note" wx:if="{{near && nearby === false && places.length}}">附近没有收藏。</view>
+  <view class="caption" wx:if="{{near && missingCoords}}">{{missingCoords}} 家没坐标</view>
+
+  <view class="sheet-white" wx:for="{{places}}" wx:key="id">
+    <view class="head">
+      <view class="name" style="font-size: 34rpx;">{{item.name}}</view>
+      <view class="meta">{{item.ratingText}}</view>
+    </view>
+    <view class="line" wx:if="{{item.tripText}}">{{item.tripText}}</view>
+    <view class="line" wx:if="{{item.tagLine}}">{{item.tagLine}}</view>
+    <view class="line" wx:if="{{item.dishLine}}">{{item.dishLine}}</view>
+    <view class="line" wx:if="{{item.noteLine}}">{{item.noteLine}}</view>
+    <view class="pills">
+      <view class="pill" data-id="{{item.id}}" bindtap="openMap">导航</view>
+      <view class="pill" wx:if="{{item.tel}}" data-tel="{{item.tel}}" bindtap="call">打电话</view>
+      <view class="pill" data-id="{{item.id}}" data-status="want" bindtap="mark">还想再去</view>
+      <view class="pill" data-id="{{item.id}}" bindtap="visited">今天去了</view>
+      <view class="pill" data-id="{{item.id}}" data-status="skip" bindtap="mark">不想再去</view>
+    </view>
+  </view>
+</view>

@@ -1,4 +1,6 @@
+import { experienceReason, experienceScore, visitAverageRating } from "./experience";
 import { distanceKm, formatDistance, withinRadius, type Origin } from "./geo";
+import { closedLast, isOpenNow } from "./hours";
 import type { Place, RecommendRequest, RecommendResult } from "./types";
 
 const MOOD_TAGS: Record<string, string[]> = {
@@ -11,6 +13,8 @@ const MOOD_TAGS: Record<string, string[]> = {
   想吃肉: ["烤肉", "烧烤", "牛肉", "卤味", "汉堡", "牛舌"],
   想吃面: ["面", "粉", "拉面", "米线", "回勺面"],
   下雨: ["火锅", "面", "粉", "黄焖鸡", "家常"],
+  冷: ["火锅", "面", "粉", "羊肉汤", "家常"],
+  热: ["清淡", "日料", "凉", "面"],
   周五: ["火锅", "烧烤", "聚餐", "炸鸡", "啤酒", "海鲜"],
   海鲜: ["海鲜", "海肠", "海胆", "扇贝", "生蚝", "蚬子"],
   烧烤: ["烧烤", "烤肉", "串", "啤酒"],
@@ -55,6 +59,15 @@ const FOOD_SYNONYMS: Record<string, string[]> = {
   面: ["面", "粉", "拉面", "米线"],
 };
 
+export function selectCandidates(places: Place[], request: RecommendRequest): Place[] {
+  const foodNeedles = parseFoodNeedles(request.keywords);
+  const excluded = new Set(request.excludeIds ?? []);
+  return places.filter(
+    (place) =>
+      place.status !== "skip" && !excluded.has(place.id) && (!foodNeedles.length || matchesFood(place, foodNeedles)),
+  );
+}
+
 export function recommend(places: Place[], request: RecommendRequest): RecommendResult[] {
   const query = `${request.mood ?? ""} ${request.keywords ?? ""}`.trim();
   const moodTags = expandQuery(query);
@@ -62,11 +75,7 @@ export function recommend(places: Place[], request: RecommendRequest): Recommend
   const origin = coordsOrigin(request);
   const radiusKm = origin ? request.radiusKm : undefined;
   const now = Date.now();
-  const excluded = new Set(request.excludeIds ?? []);
-  const scored = places
-    .filter((place) => place.status !== "skip")
-    .filter((place) => !excluded.has(place.id))
-    .filter((place) => !foodNeedles.length || matchesFood(place, foodNeedles))
+  const scored = selectCandidates(places, request)
     .filter((place) => !origin || withinRadius(place, origin, radiusKm))
     .map((place) => {
       const km = origin ? distanceKm(place, origin) : undefined;
@@ -78,6 +87,7 @@ export function recommend(places: Place[], request: RecommendRequest): Recommend
         place.notes,
         ...place.tags,
         ...(place.dishes ?? []).map((dish) => dish.name),
+        ...(place.visits ?? []).flatMap((visit) => [visit.note, ...(visit.dishes ?? [])]),
       ]
         .filter(Boolean)
         .join(" ")
@@ -87,18 +97,14 @@ export function recommend(places: Place[], request: RecommendRequest): Recommend
         if (haystack.includes(tag.toLowerCase())) score += 3;
       }
       score += foodScore(place, foodNeedles);
-      if (place.status === "want") score += 2;
-      if (place.lastVisitedAt) {
-        const days = (now - Date.parse(place.lastVisitedAt)) / 86_400_000;
-        if (days < 7) score -= 4;
-        else if (days > 30) score += 1;
-      }
-      if (km != null) score += Math.max(0, 8 - km);
-      if (request.daily) score += Math.random();
+      score += experienceScore(place, now);
+      if (km != null) score += Math.max(0, 4 - km * 0.4);
       const reason = buildReason(place, moodTags, request, origin, km);
-      return { place, score, reason, distanceKm: km };
+      return { place, score, reason, distanceKm: km, closed: isOpenNow(place.openTime) === false };
     })
     .sort((a, b) => {
+      const shut = closedLast(a.place, b.place);
+      if (shut) return shut;
       if (origin) {
         const da = a.distanceKm ?? Number.POSITIVE_INFINITY;
         const db = b.distanceKm ?? Number.POSITIVE_INFINITY;
@@ -111,8 +117,55 @@ export function recommend(places: Place[], request: RecommendRequest): Recommend
     (item, index, list) => list.findIndex((other) => other.place.id === item.place.id) === index,
   );
 
-  if (request.daily) return unique.slice(0, 1);
+  if (request.spin) {
+    const pool = unique.slice(0, 12);
+    const winner = pickWeighted(pool);
+    return winner ? [{ ...winner, reason: spinReason(winner.place, origin, winner.distanceKm) }] : [];
+  }
+  if (request.daily) {
+    const winner = pickWeighted(unique);
+    return winner ? [winner] : [];
+  }
   return unique.slice(0, 3);
+}
+
+export function spinPoolNames(places: Place[], request: RecommendRequest): string[] {
+  return selectCandidates(places, request)
+    .slice()
+    .sort((a, b) => closedLast(a, b) || experienceScore(b) - experienceScore(a))
+    .slice(0, 12)
+    .map((place) => place.name);
+}
+
+export function pickWeighted<T extends { place: Place }>(items: T[], now = Date.now()): T | undefined {
+  if (!items.length) return undefined;
+  const weights = items.map((item) => dailyWeight(item.place, now));
+  const total = weights.reduce((sum, value) => sum + value, 0);
+  if (total <= 0) return items[0];
+  let needle = Math.random() * total;
+  for (let index = 0; index < items.length; index += 1) {
+    needle -= weights[index];
+    if (needle <= 0) return items[index];
+  }
+  return items[items.length - 1];
+}
+
+export function dailyWeight(place: Place, now = Date.now()): number {
+  const rating = visitAverageRating(place) ?? place.amapRating ?? 3.2;
+  let weight = Math.max(0.6, rating) ** 2;
+  if (place.status === "want") weight *= 1.35;
+  if (isOpenNow(place.openTime) === false) weight *= 0.12;
+  const latest = place.visits?.[0]?.visitedAt ?? place.lastVisitedAt;
+  if (latest) {
+    const days = (now - Date.parse(latest)) / 86_400_000;
+    if (Number.isFinite(days) && days < 7) weight *= 0.18;
+  }
+  return weight;
+}
+
+function spinReason(place: Place, origin?: Origin, km?: number): string {
+  const near = origin && km != null ? `距${origin.label.split(" · ")[0]} ${formatDistance(km)}。` : "";
+  return `${near}转盘落到这家。${experienceReason(place)}`.trim();
 }
 
 function parseFoodNeedles(keywords?: string): string[] {
@@ -128,7 +181,13 @@ function parseFoodNeedles(keywords?: string): string[] {
 }
 
 function foodHaystack(place: Place): string {
-  return [place.name, place.cuisine, ...(place.tags ?? []), ...(place.dishes ?? []).map((dish) => dish.name)]
+  return [
+    place.name,
+    place.cuisine,
+    ...(place.tags ?? []),
+    ...(place.dishes ?? []).map((dish) => dish.name),
+    ...(place.visits ?? []).flatMap((visit) => visit.dishes ?? []),
+  ]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
@@ -186,17 +245,22 @@ function buildReason(
   origin?: Origin,
   km?: number,
 ): string {
-  const hay = [place.name, place.cuisine, ...(place.tags ?? []), ...(place.dishes ?? []).map((dish) => dish.name)].join(
-    " ",
-  );
+  const hay = [
+    place.name,
+    place.cuisine,
+    ...(place.tags ?? []),
+    ...(place.dishes ?? []).map((dish) => dish.name),
+    ...(place.visits ?? []).flatMap((visit) => [visit.note, ...(visit.dishes ?? [])]),
+  ].join(" ");
   const hits = [...new Set(moodTags.filter((tag) => tag.length >= 2 && hay.includes(tag)))];
+  const memory = experienceReason(place);
   const dishNames = (place.dishes ?? []).map((dish) => dish.name).slice(0, 2);
   const dishHint = dishNames.length ? ` 可点${dishNames.join("、")}。` : "";
   const nearHint = origin && km != null ? `距${origin.label} ${formatDistance(km)}。` : "";
-  if (request.daily && place.status === "want") {
-    return `${nearHint}你标过还想再去，今天就定 ${place.name}。${dishHint}`.trim();
+  if (request.daily) {
+    const shut = isOpenNow(place.openTime) === false ? "现在关门，先看看别的也行。" : "";
+    return `${nearHint}今天就定 ${place.name}。${shut}${memory}${dishHint}`.trim();
   }
-  if (hits.length) return `${nearHint}匹配到「${hits.slice(0, 3).join(" / ")}」。${place.notes ?? ""}${dishHint}`.trim();
-  if (place.notes) return `${nearHint}${place.notes}${dishHint}`.trim();
-  return `${nearHint}店库里的这家，最近还没去过。${dishHint}`.trim();
+  if (hits.length) return `${nearHint}${memory} 对得上「${hits.slice(0, 3).join(" / ")}」。${dishHint}`.trim();
+  return `${nearHint}${memory}${dishHint}`.trim();
 }
